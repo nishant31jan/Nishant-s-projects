@@ -1,192 +1,272 @@
-var path,mainCyclist;
-var player1,player2,player3;
-var pathImg,mainRacerImg1,mainRacerImg2;
 
-var oppPink1Img,oppPink2Img;
-var oppYellow1Img,oppYellow2Img;
-var oppRed1Img,oppRed2Img;
-var gameOverImg,cycleBell;
-
-var pinkCG, yellowCG,redCG; 
-
+var o1, o2, o3, o4, o5, c1, r, gameOver,goimg, b;
+var o1img, o2img, o3img, o4img,o5img, c1img;
+var o1g, o2g, o3g, o4g,o5g, cg, f1, f2, f1img, f2img, f1g, f2g, f2img, f3, f3img, f3g;
+var reef, reefImg, score;
+var diver, diverImg;
 var END =0;
 var PLAY =1;
 var gameState = PLAY;
 
-var distance=0;
-var gameOver, restart;
+function preload()
+{
+reefImg=loadImage("background2.jpg");
+diverImg=loadAnimation("diver11.png","diver11.png","diver2.png","diver2.png");
+o1img=loadImage("bottle.png");
+o2img=loadImage("mask.png");
+o3img=loadImage("cup.png");
+o4img=loadImage("chipsbag.png");
+c1img=loadImage("coin.png");
+o5img=loadImage("bag.png");
+goimg=loadImage("gameover.jpg");
+f1img=loadImage("fish.png");
+f2img=loadImage("fish2.png");
+f3img=loadImage("turtle.png");
+}
+function setup() 
+{             
+    createCanvas(400,400);
+   
+    reef=createSprite(200,200,20,20)
+    reef.addImage("reef",reefImg);
+    reef.velocityX=2;
 
-function preload(){
-  pathImg = loadImage("Road.png");
-  mainRacerImg1 = loadAnimation("mainPlayer1.png","mainPlayer2.png");
-  mainRacerImg2= loadAnimation("mainPlayer3.png");
-  
-  oppPink1Img = loadAnimation("opponent1.png","opponent2.png");
-  oppPink2Img = loadAnimation("opponent3.png");
-  
-  oppYellow1Img = loadAnimation("opponent4.png","opponent5.png");
-  oppYellow2Img = loadAnimation("opponent6.png");
-  
-  oppRed1Img = loadAnimation("opponent7.png","opponent8.png");
-  oppRed2Img = loadAnimation("opponent9.png");
-  
-  cycleBell = loadSound("bell.mp3");
-  gameOverImg = loadImage("gameOver.png");
+    diver=createSprite(355,200,20,20)
+        diver.addAnimation("swim",diverImg);
+        diver.scale=0.2;
+        
+        gameOver = createSprite(200,200);
+        gameOver.addImage(goimg);
+        gameOver.scale = 0.8;
+        gameOver.visible = false; 
+
+
+    score=0;
+       
+    o1g=new Group();
+    o2g=new Group();
+    o3g=new Group();
+    o4g=new Group();
+    c1g=new Group();
+    o5g=new Group();
+    f1g=new Group();
+    f2g=new Group();
+    f3g=new Group();
 }
 
-function setup(){
-  
-createCanvas(1200,300);
-// Moving background
-path=createSprite(100,150);
-path.addImage(pathImg);
-path.velocityX = -5;
 
-//creating boy running
-mainCyclist  = createSprite(70,150);
-mainCyclist.addAnimation("SahilRunning",mainRacerImg1);
-mainCyclist.scale=0.07;
-mainCyclist.debug=false;
-//set collider for mainCyclist
-mainCyclist.setCollider("rectangle",-200,0,800,1200)
-  
-gameOver = createSprite(350,100);
-gameOver.addImage(gameOverImg);
-gameOver.scale = 0.8;
-gameOver.visible = false;  
+function draw() 
+{
+    //diver.debug=true
 
-pinkCG = new Group();
-yellowCG = new Group();
-redCG = new Group();
-  
-}
+    drawSprites();
 
-function draw() {
-  background(0);
-  
-  drawSprites();
-  textSize(20);
-  fill(255);
-  text("Distance: "+ distance,900,30);
-  
-  if(gameState===PLAY){
+    if(reef.x > 300)
+    {
+        reef.x = 200;
+
+    }  
+    if(gameState===PLAY)
+    {
+        
+         
+        text("score="+score,40,50);
+       
+        text.depth=reef.depth+1;
+
+        r=Math.round(random(1,9));
     
-   distance = distance + Math.round(getFrameRate()/50);
-   path.velocityX = -(6 + 2*distance/150);
-  
-   mainCyclist.y = World.mouseY;
-  
-   edges= createEdgeSprites();
-   mainCyclist .collide(edges);
-  
-  //code to reset the background
-  if(path.x < 0 ){
-    path.x = width/2;
-  }
-  
-    //code to play cycle bell sound
-  if(keyDown("space")) {
-    cycleBell.play();
-  }
-  
-  //creating continous opponent players
-  var select_oppPlayer = Math.round(random(1,3));
-  
-  if (World.frameCount % 150 == 0) {
-    if (select_oppPlayer == 1) {
-      pinkCyclists();
-    } else if (select_oppPlayer == 2) {
-      yellowCyclists();
-    } else {
-      redCyclists();
-    }
-  }
-  
-   if(pinkCG.isTouching(mainCyclist)){
-     gameState = END;
-     player1.velocityY = 0;
-     player1.addAnimation("opponentPlayer1",oppPink2Img);
-    }
+        diver.y=World.mouseY;
+        
+        if(o1g.isTouching(diver)){
+            o1g.destroyEach();
+            score=score+1;
+        }   
+        if(o2g.isTouching(diver)){
+            o2g.destroyEach();
+            score=score+1;
+        }   
+        if(o3g.isTouching(diver)){
+            o3g.destroyEach();
+            score=score+1;
+        }   
+        if(o4g.isTouching(diver)){
+            o4g.destroyEach();
+            score=score+1;
+        }   
+        if(o5g.isTouching(diver)){
+            o5g.destroyEach();
+            score=score+1;
+        }   
+        if(c1g.isTouching(diver)){
+            c1g.destroyEach();
+            score=score+4;
+        }   
+        if(f1g.isTouching(diver)){
+            gameState = END;
+        }
+        if(f2g.isTouching(diver)){
+            gameState = END;
+        }
+        if(f3g.isTouching(diver)){
+            gameState = END;
+        }
+        if(frameCount%200==0){
+            if(r==1){
+                spawnCup();
+            }else if(r==2){
+                spawnBottle();
+            }else if(r==3){
+                spawnMask();
+            }else if(r==4){
+                spawnchipsBag();
+            }else if(r==5){
+                spawnBag();
+            }else if(r==6){
+                spawnFish();
+            }else if(r==7){
+                spawnFish2();
+            }else if(r==8){
+                spawnFish3();
+            }
+            else{
+                spawnCoin();
+            }
+            console.log(r);
+              
+        }      
+             
     
-    if(yellowCG.isTouching(mainCyclist)){
-      gameState = END;
-      player2.velocityY = 0;
-      player2.addAnimation("opponentPlayer2",oppYellow2Img);
-    }
-    
-    if(redCG.isTouching(mainCyclist)){
-      gameState = END;
-      player3.velocityY = 0;
-      player3.addAnimation("opponentPlayer3",oppRed2Img);
-    }
-    
-}else if (gameState === END) {
+  
+ }
+ else if(gameState ===END){
     gameOver.visible = true;
-    text("Press up arrow to restart the game!",320,200);
-    //Add code to show restart game instrution in text here
+    text("Press up arrow to restart the game!",110,330);
+     o1g.destroyEach();
+     o2g.destroyEach();
+     o3g.destroyEach();
+     o4g.destroyEach();
+     o5g.destroyEach();
+     c1g.destroyEach();
+     f1g.destroyEach();
+     f2g.destroyEach();
+     f3g.destroyEach();
+    diver.visible=false;
+
+     reef.velocityX=0; 
     
-  
-    path.velocityX = 0;
-    mainCyclist.velocityY = 0;
-    mainCyclist.addAnimation("SahilRunning",mainRacerImg2);
-  
-    pinkCG.setVelocityXEach(0);
-    pinkCG.setLifetimeEach(-1);
-  
-    yellowCG.setVelocityXEach(0);
-    yellowCG.setLifetimeEach(-1);
-  
-    redCG.setVelocityXEach(0);
-    redCG.setLifetimeEach(-1);
+     if(keyDown ("UP")){
+        reset();
+      } 
+}
+}
 
-    //write condition for calling reset( )
-    if(keyDown ("UP")){
-      reset();
+
+function spawnBottle(){
+if(frameCount%200==0){
+o1=createSprite(-10,Math.round(random(50,350)),40,40);
+o1g.add(o1);
+o1.velocityX=2;
+o1.addImage("bottle",o1img);
+o1.scale=0.05;
+
+}
+}
+function spawnMask(){
+    if(frameCount%200==0){
+    o2=createSprite(-10,Math.round(random(50,350)),40,40);
+    o2g.add(o2);
+    o2.velocityX=2;
+    o2.addImage("mask",o2img);
+    o2.scale=0.09;
+    
     }
-}
-}
-
-function pinkCyclists(){
-        player1 =createSprite(1100,Math.round(random(50, 250)));
-        player1.scale =0.06;
-        player1.velocityX = -(6 + 2*distance/150);
-        player1.addAnimation("opponentPlayer1",oppPink1Img);
-        player1.setLifetime=170;
-        pinkCG.add(player1);
-}
-
-function yellowCyclists(){
-        player2 =createSprite(1100,Math.round(random(50, 250)));
-        player2.scale =0.06;
-        player2.velocityX = -(6 + 2*distance/150);
-        player2.addAnimation("opponentPlayer2",oppYellow1Img);
-        player2.setLifetime=170;
-        yellowCG.add(player2);
-}
-
-function redCyclists(){
-        player3 =createSprite(1100,Math.round(random(50, 250)));
-        player3.scale =0.06;
-        player3.velocityX = -(6 + 2*distance/150);
-        player3.addAnimation("opponentPlayer3",oppRed1Img);
-        player3.setLifetime=170;
-        redCG.add(player3);
-}
-
-//create reset function here
-function reset(){
-  gameState = PLAY;
-  gameOver.visible = false;
-  mainCyclist.addAnimation("SahilRunning",mainRacerImg1);
+    }
+    function spawnCup(){
+        if(frameCount%200==0){
+        o3=createSprite(-10,Math.round(random(50,350)),40,40);
+        o3g.add(o3);
+        o3.velocityX=2;
+        o3.addImage("cup",o3img);
+        o3.scale=0.05;
+        
+        }
+    }
+        
+    function spawnchipsBag()
+    {
+            if(frameCount%200==0)
+            {
+            o4=createSprite(-10,Math.round(random(50,350)),40,40);
+            o4g.add(o4);
+            o4.velocityX=2;
+            o4.addImage("chips",o4img);
+            o4.scale=0.15;
+            }
+    }
+    
+    function spawnCoin()
+    {
+                if(frameCount%200==0)
+                {
+                c1=createSprite(-10,Math.round(random(50,350)),40,40);
+                c1g.add(c1);
+                c1.velocityX=2;
+                c1.addImage("coin",c1img);
+                c1.scale=0.03;
+                
+                }
+    }
+                
+    function spawnBag()
+    {
+                    if(frameCount%200==0)
+                    {
+                    o5=createSprite(-10,Math.round(random(50,350)),40,40);
+                    o5g.add(o5);
+                    o5.velocityX=2;
+                    o5.addImage("bag",o5img);
+                    o5.scale=0.05;
+                    }
+    }
+                    
+    function spawnFish()
+    {
+                        if(frameCount%200==0){
+                        f1=createSprite(-10,Math.round(random(50,350)),40,40);
+                        f1g.add(f1);
+                        f1.velocityX=2;
+                        f1.addImage("fish",f1img);
+                        f1.scale=0.05;
+                        }
+    }
+                        
+    function spawnFish2()
+    {
+                            if(frameCount%200==0){
+                            f2=createSprite(-10,Math.round(random(50,350)),40,40);
+                            f2g.add(f2);
+                            f2.velocityX=2;
+                            f2.addImage("fish2",f2img);
+                            f2.scale=0.2;
+                            }
+    }
+    function spawnFish3()
+    {
+                            if(frameCount%200==0){
+                            f3=createSprite(-10,Math.round(random(50,350)),40,40);
+                            f3g.add(f3);
+                            f3.velocityX=2;
+                            f3.addImage("fish3",f3img);
+                            f3.scale=0.05;
+                            }
+    }
+    function reset(){
+        gameState = PLAY;
+        gameOver.visible = false;
+        diver.visible=true;
+        score=0;
+        reef.velocityX=2;
+        
+      }                      
  
-  pinkCG.destroyEach();
-  redCG.destroyEach();
-  yellowCG.destroyEach();
-
-  distance=0;
-}
-
-
-
-
-

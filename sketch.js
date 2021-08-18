@@ -1,272 +1,98 @@
-
-var o1, o2, o3, o4, o5, c1, r, gameOver,goimg, b;
-var o1img, o2img, o3img, o4img,o5img, c1img;
-var o1g, o2g, o3g, o4g,o5g, cg, f1, f2, f1img, f2img, f1g, f2g, f2img, f3, f3img, f3g;
-var reef, reefImg, score;
-var diver, diverImg;
-var END =0;
-var PLAY =1;
-var gameState = PLAY;
-
-function preload()
-{
-reefImg=loadImage("background2.jpg");
-diverImg=loadAnimation("diver11.png","diver11.png","diver2.png","diver2.png");
-o1img=loadImage("bottle.png");
-o2img=loadImage("mask.png");
-o3img=loadImage("cup.png");
-o4img=loadImage("chipsbag.png");
-c1img=loadImage("coin.png");
-o5img=loadImage("bag.png");
-goimg=loadImage("gameover.jpg");
-f1img=loadImage("fish.png");
-f2img=loadImage("fish2.png");
-f3img=loadImage("turtle.png");
-}
-function setup() 
-{             
-    createCanvas(400,400);
-   
-    reef=createSprite(200,200,20,20)
-    reef.addImage("reef",reefImg);
-    reef.velocityX=2;
-
-    diver=createSprite(355,200,20,20)
-        diver.addAnimation("swim",diverImg);
-        diver.scale=0.2;
-        
-        gameOver = createSprite(200,200);
-        gameOver.addImage(goimg);
-        gameOver.scale = 0.8;
-        gameOver.visible = false; 
-
-
-    score=0;
-       
-    o1g=new Group();
-    o2g=new Group();
-    o3g=new Group();
-    o4g=new Group();
-    c1g=new Group();
-    o5g=new Group();
-    f1g=new Group();
-    f2g=new Group();
-    f3g=new Group();
-}
-
-
-function draw() 
-{
-    //diver.debug=true
-
-    drawSprites();
-
-    if(reef.x > 300)
-    {
-        reef.x = 200;
-
-    }  
-    if(gameState===PLAY)
-    {
-        
-         
-        text("score="+score,40,50);
-       
-        text.depth=reef.depth+1;
-
-        r=Math.round(random(1,9));
-    
-        diver.y=World.mouseY;
-        
-        if(o1g.isTouching(diver)){
-            o1g.destroyEach();
-            score=score+1;
-        }   
-        if(o2g.isTouching(diver)){
-            o2g.destroyEach();
-            score=score+1;
-        }   
-        if(o3g.isTouching(diver)){
-            o3g.destroyEach();
-            score=score+1;
-        }   
-        if(o4g.isTouching(diver)){
-            o4g.destroyEach();
-            score=score+1;
-        }   
-        if(o5g.isTouching(diver)){
-            o5g.destroyEach();
-            score=score+1;
-        }   
-        if(c1g.isTouching(diver)){
-            c1g.destroyEach();
-            score=score+4;
-        }   
-        if(f1g.isTouching(diver)){
-            gameState = END;
-        }
-        if(f2g.isTouching(diver)){
-            gameState = END;
-        }
-        if(f3g.isTouching(diver)){
-            gameState = END;
-        }
-        if(frameCount%200==0){
-            if(r==1){
-                spawnCup();
-            }else if(r==2){
-                spawnBottle();
-            }else if(r==3){
-                spawnMask();
-            }else if(r==4){
-                spawnchipsBag();
-            }else if(r==5){
-                spawnBag();
-            }else if(r==6){
-                spawnFish();
-            }else if(r==7){
-                spawnFish2();
-            }else if(r==8){
-                spawnFish3();
-            }
-            else{
-                spawnCoin();
-            }
-            console.log(r);
-              
-        }      
-             
-    
-  
- }
- else if(gameState ===END){
-    gameOver.visible = true;
-    text("Press up arrow to restart the game!",110,330);
-     o1g.destroyEach();
-     o2g.destroyEach();
-     o3g.destroyEach();
-     o4g.destroyEach();
-     o5g.destroyEach();
-     c1g.destroyEach();
-     f1g.destroyEach();
-     f2g.destroyEach();
-     f3g.destroyEach();
-    diver.visible=false;
-
-     reef.velocityX=0; 
-    
-     if(keyDown ("UP")){
-        reset();
-      } 
-}
-}
-
-
-function spawnBottle(){
-if(frameCount%200==0){
-o1=createSprite(-10,Math.round(random(50,350)),40,40);
-o1g.add(o1);
-o1.velocityX=2;
-o1.addImage("bottle",o1img);
-o1.scale=0.05;
+var bg, sleep, brush, gym, eat, drink, move, bath;
+var b, astronaut;
+var w1, w2, w3, w4;
+function preload(){
+bg=loadImage("Astronaut's daily routine/iss.png");
+sleep=loadAnimation("Astronaut's daily routine/sleep.png");
+brush=loadAnimation("Astronaut's daily routine/brush.png");
+gym=loadAnimation("Astronaut's daily routine/gym11.png","Astronaut's daily routine/gym12.png");
+eat=loadAnimation("Astronaut's daily routine/eat1.png","Astronaut's daily routine/eat2.png");
+drink=loadAnimation("Astronaut's daily routine/drink1.png","Astronaut's daily routine/drink2.png");
+move=loadAnimation("Astronaut's daily routine/move1.png","Astronaut's daily routine/move2.png");
+bath=loadAnimation("Astronaut's daily routine/bath1.png","Astronaut's daily routine/bath2.png")
 
 }
-}
-function spawnMask(){
-    if(frameCount%200==0){
-    o2=createSprite(-10,Math.round(random(50,350)),40,40);
-    o2g.add(o2);
-    o2.velocityX=2;
-    o2.addImage("mask",o2img);
-    o2.scale=0.09;
-    
-    }
-    }
-    function spawnCup(){
-        if(frameCount%200==0){
-        o3=createSprite(-10,Math.round(random(50,350)),40,40);
-        o3g.add(o3);
-        o3.velocityX=2;
-        o3.addImage("cup",o3img);
-        o3.scale=0.05;
-        
-        }
-    }
-        
-    function spawnchipsBag()
-    {
-            if(frameCount%200==0)
-            {
-            o4=createSprite(-10,Math.round(random(50,350)),40,40);
-            o4g.add(o4);
-            o4.velocityX=2;
-            o4.addImage("chips",o4img);
-            o4.scale=0.15;
-            }
-    }
-    
-    function spawnCoin()
-    {
-                if(frameCount%200==0)
-                {
-                c1=createSprite(-10,Math.round(random(50,350)),40,40);
-                c1g.add(c1);
-                c1.velocityX=2;
-                c1.addImage("coin",c1img);
-                c1.scale=0.03;
-                
-                }
-    }
-                
-    function spawnBag()
-    {
-                    if(frameCount%200==0)
-                    {
-                    o5=createSprite(-10,Math.round(random(50,350)),40,40);
-                    o5g.add(o5);
-                    o5.velocityX=2;
-                    o5.addImage("bag",o5img);
-                    o5.scale=0.05;
-                    }
-    }
-                    
-    function spawnFish()
-    {
-                        if(frameCount%200==0){
-                        f1=createSprite(-10,Math.round(random(50,350)),40,40);
-                        f1g.add(f1);
-                        f1.velocityX=2;
-                        f1.addImage("fish",f1img);
-                        f1.scale=0.05;
-                        }
-    }
-                        
-    function spawnFish2()
-    {
-                            if(frameCount%200==0){
-                            f2=createSprite(-10,Math.round(random(50,350)),40,40);
-                            f2g.add(f2);
-                            f2.velocityX=2;
-                            f2.addImage("fish2",f2img);
-                            f2.scale=0.2;
-                            }
-    }
-    function spawnFish3()
-    {
-                            if(frameCount%200==0){
-                            f3=createSprite(-10,Math.round(random(50,350)),40,40);
-                            f3g.add(f3);
-                            f3.velocityX=2;
-                            f3.addImage("fish3",f3img);
-                            f3.scale=0.05;
-                            }
-    }
-    function reset(){
-        gameState = PLAY;
-        gameOver.visible = false;
-        diver.visible=true;
-        score=0;
-        reef.velocityX=2;
-        
-      }                      
+
+function setup() {
+  createCanvas(650,400);
+
+ b=createSprite(330, 200, 50, 50);
+ b.addImage("iss",bg);
+ b.scale=0.13
  
+astronaut=createSprite(300,230);
+astronaut.addAnimation("sleep",sleep);
+astronaut.scale=0.1;
+
+w1=createSprite(10,200,10,400);
+w1.visible=false;
+w1.collide(astronaut);
+
+w2=createSprite(10,200,10,400);
+w2.visible=false;
+w2.collide(astronaut);
+
+w3=createSprite(10,200,10,400);
+w3.visible=false;
+w3.collide(astronaut);
+
+w4=createSprite(10,200,10,400);
+w4.visible=false;
+w4.collide(astronaut);
+
+
+
+}
+
+function draw() {
+  background(255,255,255);
+  
+  
+
+  if(keyDown("UP")){
+    astronaut.addAnimation("brushing",brush);
+    astronaut.changeAnimation("brushing");
+    astronaut.y=350;
+    astronaut.velocityX=0;
+    astronaut.velocityY=0;
+  }
+  if(keyDown("RIGHT")){
+    astronaut.addAnimation("eating",eat);
+    astronaut.changeAnimation("eating");
+    astronaut.y=250;
+   // astronaut.x=500;
+    astronaut.velocityX=0;
+    astronaut.velocityY=0;
+  }
+  if(keyDown("LEFT")){
+    astronaut.addAnimation("bathing",bath);
+    astronaut.changeAnimation("bathing");
+    astronaut.y=340;
+   // astronaut.x=350;
+    astronaut.velocityX=0;
+    astronaut.velocityY=0;
+  }
+  if(keyDown("DOWN")){
+    astronaut.addAnimation("gymming",gym);
+    astronaut.changeAnimation("gymming");
+    astronaut.y=250;
+    astronaut.velocityX=0;
+    astronaut.velocityY=0;
+  }
+  if(keyDown("M")){
+    astronaut.addAnimation("moving",move);
+    astronaut.changeAnimation("moving");
+    astronaut.y=320;
+    astronaut.velocityX=1;
+    astronaut.velocityY=-1;
+    astronaut.collide(w1,w2,w3,w4);
+  }
+  drawSprites();
+  textSize=40;
+  text("Instructions:",50,50);
+  text("Up arrow = Brushing",50,60)
+  text("Down arrow = Gymming",50,70)
+   text("left arrow = Eating",50,80)
+   text("Right arrow = Bathing",50,90)
+   text("M key = Moving",50,100)
+}

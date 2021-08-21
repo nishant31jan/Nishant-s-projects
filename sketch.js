@@ -1,98 +1,69 @@
-var bg, sleep, brush, gym, eat, drink, move, bath;
-var b, astronaut;
-var w1, w2, w3, w4;
-function preload(){
-bg=loadImage("Astronaut's daily routine/iss.png");
-sleep=loadAnimation("Astronaut's daily routine/sleep.png");
-brush=loadAnimation("Astronaut's daily routine/brush.png");
-gym=loadAnimation("Astronaut's daily routine/gym11.png","Astronaut's daily routine/gym12.png");
-eat=loadAnimation("Astronaut's daily routine/eat1.png","Astronaut's daily routine/eat2.png");
-drink=loadAnimation("Astronaut's daily routine/drink1.png","Astronaut's daily routine/drink2.png");
-move=loadAnimation("Astronaut's daily routine/move1.png","Astronaut's daily routine/move2.png");
-bath=loadAnimation("Astronaut's daily routine/bath1.png","Astronaut's daily routine/bath2.png")
 
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+const Body = Matter.Body;
+
+
+var ball;
+var world;
+var down, leftside, rightside;
+function preload()
+{
+	
 }
 
 function setup() {
-  createCanvas(650,400);
+	createCanvas(1550, 750);
 
- b=createSprite(330, 200, 50, 50);
- b.addImage("iss",bg);
- b.scale=0.13
- 
-astronaut=createSprite(300,230);
-astronaut.addAnimation("sleep",sleep);
-astronaut.scale=0.1;
+	engine = Engine.create();
+	world = engine.world;
 
-w1=createSprite(10,200,10,400);
-w1.visible=false;
-w1.collide(astronaut);
-
-w2=createSprite(10,200,10,400);
-w2.visible=false;
-w2.collide(astronaut);
-
-w3=createSprite(10,200,10,400);
-w3.visible=false;
-w3.collide(astronaut);
-
-w4=createSprite(10,200,10,400);
-w4.visible=false;
-w4.collide(astronaut);
+	down = new Ground(775,730,1550,20);
+	leftside = new Ground(1110,680,10,100);
+	rightside = new Ground(1310,680,10,100);
 
 
 
+	var options={
+		isStatic:false,
+		restitution:0,
+		friction:0,
+		density:1.2
+	};
+	
+	
+	
+
+	//Create the Bodies Here.
+	ball=Bodies.circle(100,400,10,options);
+	World.add(world,ball);
+
+	rectMode(CENTER);
+	ellipseMode(RADIUS);
+
+  
 }
+
 
 function draw() {
-  background(255,255,255);
   
-  
+  background(51);
 
-  if(keyDown("UP")){
-    astronaut.addAnimation("brushing",brush);
-    astronaut.changeAnimation("brushing");
-    astronaut.y=350;
-    astronaut.velocityX=0;
-    astronaut.velocityY=0;
-  }
-  if(keyDown("RIGHT")){
-    astronaut.addAnimation("eating",eat);
-    astronaut.changeAnimation("eating");
-    astronaut.y=250;
-   // astronaut.x=500;
-    astronaut.velocityX=0;
-    astronaut.velocityY=0;
-  }
-  if(keyDown("LEFT")){
-    astronaut.addAnimation("bathing",bath);
-    astronaut.changeAnimation("bathing");
-    astronaut.y=340;
-   // astronaut.x=350;
-    astronaut.velocityX=0;
-    astronaut.velocityY=0;
-  }
-  if(keyDown("DOWN")){
-    astronaut.addAnimation("gymming",gym);
-    astronaut.changeAnimation("gymming");
-    astronaut.y=250;
-    astronaut.velocityX=0;
-    astronaut.velocityY=0;
-  }
-  if(keyDown("M")){
-    astronaut.addAnimation("moving",move);
-    astronaut.changeAnimation("moving");
-    astronaut.y=320;
-    astronaut.velocityX=1;
-    astronaut.velocityY=-1;
-    astronaut.collide(w1,w2,w3,w4);
-  }
-  drawSprites();
-  textSize=40;
-  text("Instructions:",50,50);
-  text("Up arrow = Brushing",50,60)
-  text("Down arrow = Gymming",50,70)
-   text("left arrow = Eating",50,80)
-   text("Right arrow = Bathing",50,90)
-   text("M key = Moving",50,100)
+  down.show();
+  leftside.show();
+  rightside.show();
+  ellipse(ball.position.x,ball.position.y,20)
+  
+	Engine.update(engine);
+
+ drawSprites();
+ 
 }
+function keyPressed(){
+	if(keyCode === UP_ARROW){
+		Matter.Body.applyForce(ball,{x:0,y:0},{x:4,y:2})
+	}
+}
+
+

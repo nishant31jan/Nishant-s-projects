@@ -14,7 +14,15 @@ class PlayerArrow {
   }
 
   display() {
-  
+  var pos = this.body.position;
+  var angle = this.body.angle;
+
+  Push()
+  translate(pos.x,pos.y);
+  rotate(angle);
+  imageMode(CENTER)
+  this.image(this.image, 0, 0, this.width, this.height);
+  pop();
    
   }
 }

@@ -10,9 +10,9 @@ var player, playerBase, archer;
 
 
 function preload() {
-  backgroundImg = loadImage("./assets/background.png");
-  baseimage = loadImage("./assets/base.png");
-  playerimage = loadImage("./assets/player.png");
+  backgroundImg = loadImage("background.png");
+  baseimage = loadImage("base.png");
+  playerimage = loadImage("player.png");
 }
 
 function setup() {
